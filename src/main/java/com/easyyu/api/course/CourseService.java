@@ -1,6 +1,5 @@
 package com.easyyu.api.course;
 
-import com.easyyu.api.course.Course;
 import java.util.List;
 
 public interface CourseService {

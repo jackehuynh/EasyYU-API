@@ -7,20 +7,16 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
+@RequestMapping("/api/v1/course")
 public class CourseController {
 
     @Autowired
-    private CourseRepository courseRepository;
-
-    private static final String template = "Yes, %s!";
-
-    @RequestMapping(method = GET, value = "/course")
-    public Course course(@RequestParam(value="name", defaultValue = "World") String name) {
-        return new Course(String.format(template, name));
-    }
+    private CourseService courseService;
 
     @GetMapping(path="/all")
     public @ResponseBody Iterable<Course> getAllCourses() {
-        return courseRepository.findAll();
+        return courseService.findAll();
     }
+
+
 }

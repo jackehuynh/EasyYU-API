@@ -1,9 +1,14 @@
 package com.easyyu.api.course;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import org.springframework.data.repository.CrudRepository;
-
-public interface CourseRepository extends CrudRepository<Course, String>{
+@Repository
+public interface CourseRepository extends JpaRepository<Course, String> {
+    boolean existsCourseByFacultyAndSubjectAndNameAndCourse_numberAndCredit(String faculty,
+                                                                            String subject,
+                                                                            String courseName,
+                                                                            String courseNumber,
+                                                                            String credit);
 
 }
