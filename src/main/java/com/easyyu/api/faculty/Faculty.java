@@ -2,8 +2,10 @@ package com.easyyu.api.faculty;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "faculty")
 public class Faculty {
 
     @Id
