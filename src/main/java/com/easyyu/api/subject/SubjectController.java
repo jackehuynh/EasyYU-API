@@ -9,20 +9,23 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/subject")
 public class SubjectController {
+
+    /*
+    TODO: implement UPDATE, POST, DELETE mapping
+     */
 
     @Autowired
     private SubjectRepository subjectRepository;
 
-    @GetMapping("/subject")
+    @GetMapping
     public List<Subject> getAllSubject() {
         return subjectRepository.findAll();
     }
 
-    @GetMapping("/subject/{code}")
-    public Subject findByCode(@PathVariable String code) {
-        return subjectRepository.findByCode(code);
+    @GetMapping("/{subject}")
+    public Subject findBySubject(@PathVariable String subject) {
+        return subjectRepository.findBySubject(subject);
     }
-
 }
