@@ -35,4 +35,11 @@ public class CourseController {
         return courseService.findCourseByQuery(subject, courseNumber, faculty);
     }
 
+    // TODO: have a separate entity for instructors to allow for easier querying
+    // TODO: change mapping to another URI, maybe combine with getCoursesByQuery
+    @GetMapping("/search")
+    public List<String> getCoursesByInstructor(
+            @RequestParam(value="q") String inst) {
+        return courseService.findByInstructor(inst);
+    }
 }

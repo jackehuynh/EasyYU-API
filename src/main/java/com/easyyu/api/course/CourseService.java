@@ -1,5 +1,4 @@
 package com.easyyu.api.course;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +43,10 @@ public class CourseService {
         }
 
         return courseRepository.findByFacultyAndSubjectAndCourseNumberAllIgnoreCase(faculty, subject, courseNumber);
+    }
+
+    public List<String> findByInstructor(String instructor) {
+        // TODO: Incorporate instructor entity to help with returning proper JSON object instead of List<String>
+        return courseRepository.findByInstructor(instructor);
     }
 }
