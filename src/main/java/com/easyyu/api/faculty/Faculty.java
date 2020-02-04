@@ -12,11 +12,6 @@ public class Faculty {
     private String code;
     private String name;
 
-    public Faculty(String code, String name) {
-        this.code = code;
-        this.name = name;
-    }
-
     public void setCode(String code) {
         this.code = code;
     }

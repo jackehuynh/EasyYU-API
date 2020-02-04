@@ -9,6 +9,10 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class FacultyController {
 
+    /*
+    TODO: implement POST, UPDATE, DELETE mapping
+     */
+
     @Autowired
     private FacultyRepository facultyRepository;
 
@@ -21,11 +25,5 @@ public class FacultyController {
     public Faculty getFaculty(@PathVariable String code) {
         return facultyRepository.findByCode(code);
     }
-
-    @PostMapping("/faculty")
-    public Faculty insert(Faculty faculty) {
-        return facultyRepository.save(faculty);
-    }
-
 
 }
