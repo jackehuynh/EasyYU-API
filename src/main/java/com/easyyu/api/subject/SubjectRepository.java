@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, String> {
-    Subject findBySubject(String subject);
+    Subject findBySubjectAllIgnoreCase(String subject);
 }

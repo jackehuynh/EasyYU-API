@@ -14,6 +14,7 @@ public class SubjectController {
 
     /*
     TODO: implement UPDATE, POST, DELETE mapping
+    TODO: look @RestControllerAdvice and filter for controller
      */
 
     @Autowired
@@ -26,6 +27,6 @@ public class SubjectController {
 
     @GetMapping("/{subject}")
     public Subject findBySubject(@PathVariable String subject) {
-        return subjectRepository.findBySubject(subject);
+        return subjectRepository.findBySubjectAllIgnoreCase(subject);
     }
 }
