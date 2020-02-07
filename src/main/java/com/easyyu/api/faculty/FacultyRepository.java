@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FacultyRepository extends JpaRepository<Faculty, String> {
-    Faculty findByCode(String code);
+    Faculty findByCodeAllIgnoreCase(String code);
 }

@@ -23,7 +23,7 @@ public class FacultyController {
 
     @GetMapping("/faculty/{code}")
     public Faculty getFaculty(@PathVariable String code) {
-        return facultyRepository.findByCode(code);
+        return facultyRepository.findByCodeAllIgnoreCase(code);
     }
 
 }
