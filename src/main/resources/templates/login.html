@@ -3,26 +3,91 @@
 <head>
     <div th:insert = "fragments/header :: header"></div>
     <title>Login page</title>
+    <style type="text/css">
+        .login-form {
+            width: 385px;
+            margin: 30px auto;
+        }
+        .login-form form {        
+            margin-bottom: 15px;
+            background: #f7f7f7;
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+        }
+        .login-form h2 {
+            margin: 0 0 15px;
+        }
+        .form-control, .login-btn {
+            min-height: 38px;
+            border-radius: 2px;
+        }
+        .input-group-addon .fa {
+            font-size: 18px;
+        }
+        .login-btn {
+            font-size: 15px;
+            font-weight: bold;
+        }
+        .social-btn .btn {
+            border: none;
+            margin: 10px 3px 0;
+            opacity: 1;
+        }
+        .social-btn .btn:hover {
+            opacity: 0.9;
+        }
+        .social-btn .btn-primary {
+            background: #507cc0;
+        }
+        .social-btn .btn-info {
+            background: #64ccf1;
+        }
+        .social-btn .btn-danger {
+            background: #df4930;
+        }
+        .or-seperator {
+            margin-top: 20px;
+            text-align: center;
+            border-top: 1px solid #ccc;
+        }
+        .or-seperator i {
+            padding: 0 10px;
+            background: #f7f7f7;
+            position: relative;
+            top: -11px;
+            z-index: 1;
+        }   
+    </style>
 </head>
 <body>
-    <h1>Login page</h1>
-        <p th:if="${loginError}" class="error">Wrong user or password</p>
+    <header id="navbar" th:insert="fragments/navbar :: navbar"></header>
+    <div class="login-form">
         <form th:action="@{/login}" method="post">
-            <label for="username">Username</label>:
-            <input type="text" id="username" name="username" autofocus="autofocus" placeholder="Username">
-            <br>
-            <label for="password">Password</label>:
-            <input type="password" id="password" name="password" placeholder="Password">
-            <br>
-            <input type="submit" value="Log in">
+            <h2 class="text-center">Sign in</h2>   
+        <div class="form-group">
+        	<div class="input-group">
+                <!-- TODO: change type to email -->
+                <input type="text" class="form-control" id="username" name="username" placeholder="Email" required="required" autofocus="autofocus">				
+            </div>
+        </div>
+		<div class="form-group">
+            <div class="input-group">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required="required">				
+            </div>
+        </div>        
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary login-btn btn-block">Sign in</button>
+        </div>
+        <div class="clearfix">
+            <label class="pull-left checkbox-inline"><input type="checkbox"> Remember me</label>
+            <a href="#" class="pull-right">Forgot Password?</a>
+        </div>
+        <div class="text-center social-btn">
+            <a href="#" class="btn btn-block btn-danger"><i class="fab fa-google"></i>&nbsp; Sign in with Google</a>
+            <a href="/oauth2/authorization/github" class="btn btn-block btn-secondary"><i class="fab fa-github"></i>&nbsp; Sign in with Github</a>
+        </div>
         </form>
-        <div>
-            <input type="checkbox" id="remember-me" name="remember-me">
-            <label class="form-check-label" for="remember-me">Remember Me?</label>
-        </div>
-        <div>
-            <a href="/oauth2/authorization/github">Login with Github</a>
-        </div>
+        <p class="text-center text-muted small">Don't have an account? <a href="#">Sign up here!</a></p>
+    </div>
 </body>
 </html>
-
