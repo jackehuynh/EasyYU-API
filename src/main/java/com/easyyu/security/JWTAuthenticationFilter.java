@@ -3,7 +3,7 @@ package com.easyyu.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.easyyu.users.CustomUserDetails;
-import com.easyyu.users.LoginViewModel;
+import com.easyyu.users.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,19 +30,18 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     // Also need to pass in {"username": "test", "password":"test"} in the request body
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        //Grab credentials and map them to loginviewmodel
-        LoginViewModel credentials = null;
+        User userCredentials = null;
 
         try {
-            credentials = new ObjectMapper().readValue(request.getInputStream(), LoginViewModel.class);
+            userCredentials = new ObjectMapper().readValue(request.getInputStream(), User.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Create login token
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                credentials.getUsername(),
-                credentials.getPassword(),
+                userCredentials.getUsername(),
+                userCredentials.getPassword(),
                 new ArrayList<>()
         );
 
@@ -50,6 +49,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return authenticationManager.authenticate(authenticationToken);
     }
 
+    // Upon successful authentication, create token and add to the response header
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
@@ -63,6 +63,5 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         // Add token to the response header
         response.addHeader(JWTConstants.HEADER_STRING, JWTConstants.TOKEN_PREFIX + token);
-
     }
 }

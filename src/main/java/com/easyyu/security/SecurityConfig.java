@@ -1,5 +1,6 @@
 package com.easyyu.security;
 
+import com.easyyu.users.CustomUserDetailsService;
 import com.easyyu.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +29,45 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Configuration
     @Order(1)
+    public static class RestApiSecurity extends WebSecurityConfigurerAdapter {
+
+        @Autowired
+        private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+        @Autowired
+        private UserService userService;
+
+        @Autowired
+        private UserDetailsService customUserDetailsService;
+
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth
+                    .userDetailsService(this.customUserDetailsService)
+                    .passwordEncoder(this.bCryptPasswordEncoder);
+        }
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .antMatcher("/api/**")
+                    .csrf()
+                        .disable()
+                    .authorizeRequests()
+                        .antMatchers("/api/v1/**").hasAnyRole("USER", "ADMIN")
+                    .and()
+                        .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                        .addFilter(new JWTAuthorizationFilter(authenticationManager(), this.userService))
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        }
+    }
+
+    @Configuration
+    @Order(2)
     public static class FormLoginWebSecurity extends WebSecurityConfigurerAdapter {
+
+        @Autowired
+        private BCryptPasswordEncoder bCryptPasswordEncoder;
 
         @Autowired
         private UserDetailsService CustomUserDetailServices;
@@ -35,52 +75,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
+                    .cors()
+                    .and()
                     .authorizeRequests()
-                    .antMatchers("/").permitAll()
-                    .antMatchers("/admin").hasRole("ADMIN")
-                    .antMatchers("/user").hasAnyRole("ADMIN", "USER")
+                        .antMatchers("/admin").hasRole("ADMIN")
+                        .antMatchers("/user").hasAnyRole("ADMIN", "USER")
+                        .antMatchers("/").permitAll()
                     .and()
                         .formLogin()
                         .loginPage("/login")
-                        .permitAll()
+                        .failureUrl("/login?error")
                         .defaultSuccessUrl("/")
+                        .permitAll()
                     .and()
                         .logout()
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                     .and()
-                        .rememberMe()
-                    .and()
-                        .csrf()
-                        .disable();
+                        .rememberMe();
         }
 
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth
-                    .userDetailsService(CustomUserDetailServices);
+                    .userDetailsService(this.CustomUserDetailServices)
+                    .passwordEncoder(this.bCryptPasswordEncoder);
         }
     }
 
-    @Configuration
-    @Order(2)
-    public static class RestApiSecurity extends WebSecurityConfigurerAdapter {
-        @Autowired
-        private UserService userService;
-
-        @Override
-        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            super.configure(auth);
-        }
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .csrf().disable()
-                    .addFilter(new JWTAuthenticationFilter(authenticationManager()))
-                    .addFilter(new JWTAuthorizationFilter(authenticationManager(), this.userService))
-                    .authorizeRequests()
-                    .antMatchers("/api/v1/*").hasAnyRole("USER", "ADMIN");
-        }
-    }
 }
