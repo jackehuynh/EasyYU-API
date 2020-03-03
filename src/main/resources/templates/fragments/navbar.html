@@ -8,22 +8,39 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/admin">Admin</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/user">User</a>
-            </li>
-        </ul>
-        <ul class="nav justify-content-end">
-            <li class="nav-item">
-                <a class="nav-link" href="/login">
-                    <i class="fas fa-sign-in-alt"></i>
-                    Login
+                <a class="nav-link" href="/docs">
+                    <i class="far fa-file-alt"></i>
+                    Documentation
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/logout">Logout</a>
-            </li>
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin">Admin</a>
+                </li>
+            </div>
+            <div sec:authorize="isAuthenticated()">
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">Dashboard</a>
+                </li>
+            </div>
+        </ul>
+        <ul class="nav justify-content-end">
+            <div sec:authorize="isAnonymous()">
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login
+                    </a>
+                </li>
+            </div>
+            <div sec:authorize="isAuthenticated()">
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </a>
+                </li>
+            </div>
         </ul>
     </nav>
 </div>

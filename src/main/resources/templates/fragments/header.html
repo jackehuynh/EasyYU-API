@@ -1,7 +1,11 @@
 <!-- Header contains references to stylesheets used -->
 <head th:fragment="header">
     <meta charset="UTF-8"/>
-    <link th:href="@{~/font-awesome/css/all.css}" rel="stylesheet">
-    <link th:href="@{~/bootstrap.css}" rel="stylesheet">
-    <link th:href="@{~/normalize.css}" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" href="font-awesome/css/all.css" rel="stylesheet">
+    <link type="text/css" href="bootstrap/bootstrap.css" rel="stylesheet">
+    <link type="text/css" href="bootstrap/normalize.css" rel="stylesheet">
+
+    <!-- JQuery -->
+    <script type="javascript" th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js}"></script>
 </head>

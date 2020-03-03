@@ -8,7 +8,18 @@
 
 <body>
     <div id="navbar" th:insert = "fragments/navbar.html :: navbar"></div>
-
     <p>Hello Admin</p>
+    <table class="glyphicon glyphicon-calendar">
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Roles</th>
+        </tr>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.roles}"></td>
+        </tr>
+    </table>
 </body>
 </html>
