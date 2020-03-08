@@ -4,7 +4,6 @@ import com.easyyu.api.course.offerings.CourseOfferingInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
@@ -14,14 +13,11 @@ import java.io.Serializable;
 import java.util.List;
 
 @TypeDefs({
-        @TypeDef(name = "json", typeClass = JsonStringType.class),
         @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 })
 @Entity
 @Table(name = "courses")
-@JsonPropertyOrder(
-        { "faculty", "subject", "course_number", "name", "description", "credit",
-        "instruction_language", "offerings", "url"})
+@JsonPropertyOrder({ "faculty", "subject", "course_number", "name", "description", "credit", "instruction_language", "offerings", "url"})
 public class Course implements Serializable {
 
     private String faculty;

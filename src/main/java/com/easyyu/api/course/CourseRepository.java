@@ -12,8 +12,7 @@ public interface CourseRepository extends JpaRepository<Course, String> {
     List<Course> findBySubjectAllIgnoreCase(String subject);
     List<Course> findBySubjectAndCourseNumberAllIgnoreCase(String subject, String courseNumber);
     List<Course> findByFacultyAllIgnoreCase(String faculty);
-    List<Course> findByFacultyAndSubjectAndCourseNumberAllIgnoreCase(
-            String faculty, String Subject, String courseNumber);
+    List<Course> findByFacultyAndSubjectAndCourseNumberAllIgnoreCase(String faculty, String Subject, String courseNumber);
 
     // TODO: Query for courses offered in certain semesters
     // TODO: Query for courses with certain pre-reqs

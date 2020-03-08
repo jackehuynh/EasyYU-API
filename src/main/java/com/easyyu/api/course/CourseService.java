@@ -42,6 +42,13 @@ public class CourseService {
             return findCourseBySubjectAndCourseNumber(subject, courseNumber);
         }
 
+        /*
+        if (subject == null && courseNumber == null & faculty == null) {
+            return courseRepository.findTop20ByOrderBySubjectAsc();
+        }
+
+         */
+
         return courseRepository.findByFacultyAndSubjectAndCourseNumberAllIgnoreCase(faculty, subject, courseNumber);
     }
 
