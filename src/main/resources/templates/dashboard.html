@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:insert = "fragments/header :: header"></div>
+    <title>Admin Page</title>
+</head>
+
+<body>
+    <div id="navbar" th:insert = "fragments/navbar.html :: navbar"></div>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <p>Only admins can see this</p>
+    </div>
+    <p>Hello <span sec:authentication="name"></span></p>
+    <p>Role: <span sec:authentication="principal.authorities"></span></p>
+
+    <form th:action="@{/dashboard}" method="post">
+        <button type="submit">Generate Token</button>
+        <p th:object="${user}" th:text="${user.token}"></p>
+    </form>
+
+</body>
+</html>

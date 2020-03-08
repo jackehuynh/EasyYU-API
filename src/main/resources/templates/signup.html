@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:insert = "fragments/header :: header"></div>
+    <title>Waltz EasyYU API - Sign Up</title>
+    <style type="text/css">
+        .registration-form {
+            width: 340px;
+            margin: 50px auto;
+        }
+        .registration-form form {
+            margin-bottom: 15px;
+            background: #f7f7f7;
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+        }
+        .registration-form h2 {
+            margin: 0 0 15px;
+        }
+        .form-control, .btn {
+            min-height: 38px;
+            border-radius: 2px;
+        }
+        .btn {
+            font-size: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="navbar" th:replace = "fragments/navbar.html :: navbar"></header>
+    <div class="registration-form">
+        <form action="#" th:action="@{/signup}" th:object="${user}" method="post">
+            <h2 class="text-center">Register Account</h2>
+            <div class="form-group">
+                <input th:field="*{username}" type="text" class="form-control" placeholder="Email" required="required">
+            </div>
+            <div class="form-group">
+                <input th:field="*{password}" type="password" class="form-control" placeholder="Password" required="required">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+            </div>
+        </form>
+        <p class="text-center text-muted small">Already have an account? <a href="/login">Log in here.</a></p>
+    </div>
+    <!--
+    <div class="container pt-4">
+        <form action="#" th:action="@{/signup}" th:object="${user}" method="post" class="form-inline justify-content-center">
+            <div class="form-group">
+                <label for="email">Email: </label>
+                <input th:field="*{username}" type="text" name="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password: </label>
+                <input th:field="*{password}" type="password" name="password" data-toggle="password">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+    -->
+</body>
+</html>
