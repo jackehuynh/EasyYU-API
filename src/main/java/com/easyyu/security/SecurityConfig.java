@@ -6,21 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-/*
- * Security configuration adapters for different parts of the website.
- */
+
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -32,33 +32,51 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static class RestApiSecurity extends WebSecurityConfigurerAdapter {
 
         @Autowired
-        private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-        @Autowired
         private UserService userService;
 
-        @Autowired
-        private UserDetailsService customUserDetailsService;
+        // return authentication filter with header and token values
+        public APIAuthFilter authFilter() {
+            String header = AuthConstants.header;
+            APIAuthFilter filter = new APIAuthFilter(header);
+            filter.setAuthenticationManager(new AuthenticationManager() {
 
-        @Override
-        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            auth
-                    .userDetailsService(this.customUserDetailsService)
-                    .passwordEncoder(this.bCryptPasswordEncoder);
+                @Override
+                public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+                    String principal = (String) authentication.getPrincipal();
+
+                    // TODO: find another way to check if token is valid. Use authentication provider?
+                    String token = userService.getToken(principal);
+                    System.out.println("Token in webconfig: " + token);
+
+                    if (!token.equals(principal)) {
+                        System.out.println("Auth failed. Token does not much.");
+                        throw new SecurityException("Auth failed.");
+                    } else {
+                        System.out.println("Authentication successful. " + token);
+                        authentication.setAuthenticated(true);
+                        return authentication;
+                    }
+                }
+            });
+            return filter;
         }
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .antMatcher("/api/**")
-                    .csrf()
-                        .disable()
-                    .authorizeRequests()
-                        .antMatchers("/api/v1/**").hasAnyRole("USER", "ADMIN")
+                    .csrf().disable()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
-                        .addFilter(new JWTAuthenticationFilter(authenticationManager()))
-                        .addFilter(new JWTAuthorizationFilter(authenticationManager(), this.userService))
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                    .addFilter(authFilter())
+                    .authorizeRequests()
+                    .anyRequest().authenticated();
+        }
+
+        @Bean
+        @Override
+        public AuthenticationManager authenticationManagerBean() throws Exception {
+            return super.authenticationManagerBean();
         }
     }
 
@@ -67,40 +85,54 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static class FormLoginWebSecurity extends WebSecurityConfigurerAdapter {
 
         @Autowired
-        private BCryptPasswordEncoder bCryptPasswordEncoder;
+        private AuthenticateSuccessHandler authSuccessHandler;
 
         @Autowired
-        private UserDetailsService CustomUserDetailServices;
+        private PasswordEncoder bCryptPasswordEncoder;
+
+        @Autowired
+        private CustomUserDetailsService userDetailsServices;
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .cors()
                     .and()
+                    .csrf().disable()
                     .authorizeRequests()
+                        .antMatchers("/signup", "/login", "/docs", "/", "/resources/**").permitAll()
+                        .antMatchers("/dashboard").authenticated()
                         .antMatchers("/admin").hasRole("ADMIN")
-                        .antMatchers("/user").hasAnyRole("ADMIN", "USER")
-                        .antMatchers("/").permitAll()
+                    .anyRequest().authenticated()
                     .and()
-                        .formLogin()
+                    .formLogin()
                         .loginPage("/login")
                         .failureUrl("/login?error")
-                        .defaultSuccessUrl("/")
+                        .successHandler(authSuccessHandler)
                         .permitAll()
                     .and()
                         .logout()
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/login").permitAll()
+                        .deleteCookies("JSESSIONID")
                     .and()
-                        .rememberMe();
+                        .exceptionHandling();
         }
 
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth
-                    .userDetailsService(this.CustomUserDetailServices)
+                    .userDetailsService(this.userDetailsServices)
                     .passwordEncoder(this.bCryptPasswordEncoder);
+            auth.eraseCredentials(false);
+        }
+
+        // this method allows static resources to be ignored by spring security
+        @Override
+        public void configure(WebSecurity web) throws Exception {
+            web
+                    .ignoring()
+                    .antMatchers("/font-awesome/**", "/bootstrap/**")
+                    .antMatchers("/actuator/**");
         }
     }
-
 }

@@ -16,6 +16,14 @@ public class CustomUserDetails implements UserDetails {
         this.user = user;
     }
 
+    public void setToken(String token) {
+        user.setToken(token);
+    }
+
+    public String getToken() {
+        return user.getToken();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
