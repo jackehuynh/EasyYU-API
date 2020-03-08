@@ -1,17 +1,25 @@
 package com.easyyu.api.buildings.food;
 
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.List;
 
+@TypeDefs({
+        @TypeDef(name = "string-array", typeClass = StringArrayType.class)
+})
 @Entity
-@Table(name = "FoodBuilding")
+@Table(name = "foodbuilding")
 public class FoodBuilding implements Serializable {
 
     // Dining Directory information - https://foodservices.info.yorku.ca/dining-directory/
+    // TODO: give Long ID
 
     @Id
     @Column(name = "restaurant")
@@ -24,18 +32,21 @@ public class FoodBuilding implements Serializable {
     private String phoneNumber;
 
     private String description;
-    private List<String> hours;
+
+    @Type(type = "string-array")
+    @Column(name = "hours", columnDefinition = "text[]")
+    private String[] hours;
     private String campus;
     private String email;
 
     @Column(name = "paymentmethods")
-    private List<String> paymentMethods;
+    private String[] paymentMethods;
 
-    public List<String> getPaymentMethods() {
+    public String[] getPaymentMethods() {
         return paymentMethods;
     }
 
-    public void setPaymentMethods(List<String> paymentMethods) {
+    public void setPaymentMethods(String[] paymentMethods) {
         this.paymentMethods = paymentMethods;
     }
 
@@ -47,11 +58,11 @@ public class FoodBuilding implements Serializable {
         this.description = description;
     }
 
-    public void setHours(List<String> hours) {
+    public void setHours(String[] hours) {
         this.hours = hours;
     }
 
-    public List<String> getHours() {
+    public String[] getHours() {
         return hours;
     }
 

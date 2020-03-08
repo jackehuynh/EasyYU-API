@@ -1,7 +1,6 @@
 package com.easyyu.api.buildings.athletic;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
@@ -11,11 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.List;
-
 
 @TypeDefs({
-        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+        @TypeDef(name = "string-array", typeClass = StringArrayType.class)
 })
 @Entity
 @Table(name = "athleticbuilding")
@@ -26,10 +23,9 @@ public class AthleticBuilding implements Serializable {
     @Id
     private String name;
 
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb", name = "hours")
-    @JsonProperty(value = "hours")
-    private List<String> hours;
+    @Type(type = "string-array")
+    @Column(name = "hours", columnDefinition = "text[]")
+    private String[] hours;
 
     public String getName() {
         return name;
@@ -39,11 +35,11 @@ public class AthleticBuilding implements Serializable {
         this.name = name;
     }
 
-    public List<String> getHours() {
+    public String[] getHours() {
         return hours;
     }
 
-    public void setHours(List<String> hours) {
+    public void setHours(String[] hours) {
         this.hours = hours;
     }
 }
