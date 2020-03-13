@@ -1,6 +1,6 @@
 --- Athletic Building ---
 INSERT INTO AthleticBuilding(name, hours) VALUES
-('Tait McKenzie Centre', '["Mon - Thu: 6am-11:30pm", "Fri: 6am-10pm", "Sat: 9am-10pm", "Sun: 9am-5:30pm"]'), ('Fitness Centre', '["Mon - Fri: 6am-10pm", "Sat: 10am-7pm", "Sun: 9am-5pm"]')
+('Tait McKenzie Centre', ARRAY ['Mon - Thu: 6am-11:30pm', 'Fri: 6am-10pm', 'Sat: 9am-10pm', 'Sun: 9am-5:30pm']), ('Fitness Centre', ARRAY ['Mon - Fri: 6am-10pm', 'Sat: 10am-7pm', 'Sun: 9am-5pm'])
 ON CONFLICT (name) DO NOTHING;
 
 --- Water Bottle Refill Stations ---
@@ -19,3 +19,20 @@ INSERT INTO WaterRefill(campus, building, location) VALUES
 ('Keele', 'Toronto Track & Field Centre', 'By weight room'), ('Keele', 'Vanier College', 'Across from room 135'), ('Keele', 'Vari Hall', 'Near room 1004'),
 ('Glendon', 'York Hall', 'Outside Cafeteria entrance'), ('Glendon', 'Proctor Field House', 'By main entrance')
 ON CONFLICT (building, location) DO NOTHING;
+
+-- Faculty Abbreviations --
+INSERT INTO faculty(code, name) VALUES
+('AP', 'Faculty of Liberal Arts & Professional Studies'), ('ED', 'Faculty of Education'), ('ES', 'Faculty of Environmental Studies'),
+('FA', 'School of the Arts, Media, Performance & Design'), ('GL', 'Glendon College / Collège universitaire Glendon'), ('GS', 'Faculty of Graduate Studies'),
+('HH', 'Faculty of Health'), ('LE', 'Lassonde School of Engineering'), ('LW', 'Osgoode Hall Law School'), ('SB', 'Schulich School of Business'), ('SC', 'Faculty of Science')
+ON CONFLICT (code, name) DO NOTHING;
+
+-- Building Acronyms --
+INSERT INTO buildingacronym(acronym, name) VALUES
+('ACE', 'Accolade Building East'), ('ACW', 'Accolade Building West'), ('AO', 'Archives of Ontario'), ('ATK', 'Atkinson'), ('BC', 'Norman Bethune College'),
+('BCSS', 'Bennett Centre for Student Services'), ('BRG', 'Bergeron Centre for Engineering Excellence'), ('BSB', 'Behavioural Sciences Building'),
+('BU', 'Burton Auditorium'), ('CB', 'Chemistry Building'), ('CC', 'Calumet College'), ('CFA', 'The Joan & Martin Goldfarb Centre for Fine Arts'),
+('CFT', 'Centre for Film and Theatre'), ('CLH', 'Curtis Lecture Halls'), ('CMB', 'Computer Methods Building'), ('CSQ', 'Central Square'),
+('CUB', 'Central Utilities Building'), ('DB', 'Dahdaleh Building (formerly TEL)'), ('ELC', 'Executive Learning Centre'),
+('FC', 'Founders College'), ('FL', 'Frost Library (Glendon campus)'), ('FRQ', 'Farquharson Life Sciences'), ('FTC', 'Founders Tennis Court')
+ON CONFLICT (acronym, name) DO NOTHING;
