@@ -7,7 +7,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/v1/courses")
+@RequestMapping(path = "${api_url}/courses")
 public class CourseController {
     /*
     TODO: Implement UPDATE, POST, PUT, DELETE mappings
@@ -28,7 +28,8 @@ public class CourseController {
     }
 
     @GetMapping("/faculty")
-    public List<Course> getCoursesByFaculty(@RequestParam(value = "fa", required = true) String faculty) {
+    public List<Course> getCoursesByFaculty(
+            @RequestParam(value = "fa", required = true) String faculty) {
         return courseService.findCourseByFaculty(faculty);
     }
 

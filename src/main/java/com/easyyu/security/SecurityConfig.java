@@ -3,6 +3,7 @@ package com.easyyu.security;
 import com.easyyu.users.CustomUserDetailsService;
 import com.easyyu.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -34,9 +35,11 @@ public class SecurityConfig {
         @Autowired
         private UserService userService;
 
+        @Value("${api_header}")
+        private String header;
+
         // return authentication filter with header and token values
         public APIAuthFilter authFilter() {
-            String header = AuthConstants.header;
             APIAuthFilter filter = new APIAuthFilter(header);
             filter.setAuthenticationManager(new AuthenticationManager() {
 

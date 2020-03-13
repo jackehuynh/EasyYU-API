@@ -7,7 +7,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/v1/subject")
+@RequestMapping(path = "${api_url}/subject")
 public class SubjectController {
 
     /*
@@ -18,7 +18,7 @@ public class SubjectController {
     @Autowired
     private SubjectRepository subjectRepository;
 
-    @GetMapping
+    @GetMapping("")
     public List<Subject> getAllSubject() {
         return subjectRepository.findAll();
     }

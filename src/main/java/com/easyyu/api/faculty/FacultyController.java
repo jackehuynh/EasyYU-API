@@ -7,7 +7,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/v1")
+@RequestMapping(path = "${api_url}/faculty")
 public class FacultyController {
 
     /*
@@ -17,12 +17,12 @@ public class FacultyController {
     @Autowired
     private FacultyRepository facultyRepository;
 
-    @GetMapping("/faculty")
+    @GetMapping("")
     public List<Faculty> getAllFaculty() {
         return facultyRepository.findAll();
     }
 
-    @GetMapping("/faculty/{code}")
+    @GetMapping("{code}")
     public Faculty getFaculty(@PathVariable String code) {
         return facultyRepository.findByCodeAllIgnoreCase(code);
     }
