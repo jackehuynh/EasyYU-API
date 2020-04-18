@@ -1,7 +1,18 @@
 package com.easyyu.exceptions.customexceptions;
 
-import org.springframework.web.bind.annotation.ResponseStatus;
+public class InvalidParameterException extends RuntimeException {
 
-@ResponseStatus()
-public class MissingQueryException extends RuntimeException {
+    private String message;
+
+    public InvalidParameterException(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }
