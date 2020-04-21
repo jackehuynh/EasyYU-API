@@ -1,5 +1,6 @@
 package com.easyyu.security;
 
+import com.easyyu.exceptions.ExceptionType;
 import com.easyyu.users.CustomUserDetailsService;
 import com.easyyu.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,11 +50,12 @@ public class SecurityConfig {
 
                     // TODO: find another way to check if token is valid. Use authentication provider?
                     String token = userService.getToken(principal);
-                    System.out.println("Token in webconfig: " + token);
 
-                    if (!token.equals(principal)) {
-                        System.out.println("Auth failed. Token does not much.");
-                        throw new SecurityException("Auth failed.");
+                    // TODO: throw json error response if wrong token
+                    if (token == null) {
+                        System.out.println("Auth failed.");
+                        throw new ExceptionType.UnauthorizedException();
+//                        throw new SecurityException("Auth failed.");
                     } else {
                         System.out.println("Authentication successful. " + token);
                         authentication.setAuthenticated(true);
