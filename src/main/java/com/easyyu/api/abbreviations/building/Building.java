@@ -1,4 +1,4 @@
-package com.easyyu.api.abbreviations;
+package com.easyyu.api.abbreviations.building;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

@@ -1,12 +1,24 @@
-package com.easyyu.api.abbreviations;
+package com.easyyu.api.abbreviations.coursetype;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 
-// TODO: make it an entity
+@Entity
 public class CourseType implements Serializable {
 
+    @Id
+    private String id;
     private String abbreviation; // ex: DISS
     private String type; // ex: Dissertation
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getAbbreviation() {
         return abbreviation;
