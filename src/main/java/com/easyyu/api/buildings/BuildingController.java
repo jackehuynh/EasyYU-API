@@ -3,7 +3,9 @@ package com.easyyu.api.buildings;
 import com.easyyu.api.buildings.athletic.AthleticBuilding;
 import com.easyyu.api.buildings.athletic.AthleticBuildingRepository;
 import com.easyyu.api.buildings.food.*;
+import com.easyyu.api.utils.HttpServletUtil;
 import com.easyyu.exceptions.ExceptionType;
+import org.omg.CORBA.DynAnyPackage.Invalid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.security.InvalidParameterException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "${api_url}/buildings")
@@ -23,7 +26,7 @@ public class BuildingController {
     private WaterRefillService waterRefillService;
 
     @Autowired
-    private FoodBuildingRepository foodBuildingRepository;
+    private FoodBuildingService foodBuildingService;
 
     @Autowired
     private AthleticBuildingRepository athleticBuildingRepository;
@@ -33,23 +36,36 @@ public class BuildingController {
         throw new ExceptionType.PageNotFoundException();
     }
 
-    // TODO: edge case of user adding more than one param, do this for both /food and /waterstations
+    @GetMapping(value = "/waterstations", params = "campus")
+    public List<WaterRefill> getWaterStationsByCampus(@RequestParam(value = "campus") String campus) {
+        return waterRefillService.findByCampus(campus);
+    }
+
     @GetMapping("/waterstations")
-    public List<WaterRefill> getAllWaterStations(@RequestParam(value = "campus", required = true) String campus) {
-        return waterRefillService.findByCampusIgnoreCase(campus);
+    public List<WaterRefill> getAllWaterStations(HttpServletRequest req) {
+        if (req.getParameterMap().size() > 0) {
+            throw new InvalidParameterException();
+        }
+        return waterRefillService.findAll();
+    }
+
+    @GetMapping(value = "/food", params = "campus")
+    public List<FoodBuilding> getFoodBuildingByCampus(@RequestParam(value = "campus") String campus, HttpServletRequest req) {
+        return foodBuildingService.findByCampus(campus);
     }
 
     @GetMapping("/food")
-    public List<FoodBuilding> getAllFoodBuilding(@RequestParam(value = "campus", required = true) String campus) {
-        return foodBuildingRepository.findAll();
+    public List<FoodBuilding> getAllFoodBuildings(HttpServletRequest req) {
+        if (req.getParameterMap().size() > 0) {
+            throw new InvalidParameterException();
+        }
+        return foodBuildingService.findAll();
     }
 
     @GetMapping("/athletic")
-    public List<AthleticBuilding> getAllAthleticBuilding(HttpServletRequest request) {
-        /* Checks if additional queries are passed */
-        String query = request.getQueryString();
-        if (query != null) {
-            throw new ExceptionType.InvalidParameterException();
+    public List<AthleticBuilding> getAllAthleticBuildin(HttpServletRequest req) {
+        if (req.getParameterMap().size() > 0) {
+            throw new InvalidParameterException();
         }
         return athleticBuildingRepository.findAll();
     }

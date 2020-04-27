@@ -12,10 +12,14 @@ public class WaterRefillService {
     @Autowired
     private WaterRefillRepository waterRefillRepository;
 
-    public List<WaterRefill> findByCampusIgnoreCase(String campus) {
+    public List<WaterRefill> findByCampus(String campus) {
         if (campus.equalsIgnoreCase("keele") || campus.equalsIgnoreCase("glendon")) {
             return waterRefillRepository.findByCampusIgnoreCase(campus);
         }
-        throw new InvalidParameterException(campus);
+        throw new InvalidParameterException();
+    }
+
+    public List<WaterRefill> findAll() {
+        return waterRefillRepository.findAll();
     }
 }

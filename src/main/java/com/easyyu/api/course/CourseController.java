@@ -3,6 +3,8 @@ package com.easyyu.api.course;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.security.InvalidParameterException;
 import java.util.List;
 
 @RestController
@@ -24,12 +26,15 @@ public class CourseController {
     public List<Course> getCoursesBySubject(
             @RequestParam(value = "sj", required = true) String subject,
             @RequestParam(value = "cnum", required = false) String courseNumber) {
+
         return courseService.findCourseBySubjectAndOrCourseNumber(subject, courseNumber);
     }
 
     @GetMapping("/faculty")
-    public List<Course> getCoursesByFaculty(
-            @RequestParam(value = "fa", required = true) String faculty) {
+    public List<Course> getCoursesByFaculty(@RequestParam(value = "fa", required = true) String faculty, HttpServletRequest req) {
+        if (req.getParameterMap().size() > 1) {
+            throw new InvalidParameterException();
+        }
         return courseService.findCourseByFaculty(faculty);
     }
 
@@ -44,8 +49,10 @@ public class CourseController {
     // TODO: have a separate entity for instructors to allow for easier querying
     // TODO: change mapping to another URI, maybe combine with getCoursesByQuery
     @GetMapping("/instructor")
-    public List<String> getCoursesByInstructor(
-            @RequestParam(value="q", required = true) String inst) {
+    public List<String> getCoursesByInstructor(@RequestParam(value="q", required = true) String inst, HttpServletRequest req) {
+        if (req.getParameterMap().size() > 1) {
+            throw new InvalidParameterException();
+        }
         return courseService.findByInstructor(inst);
     }
 }
