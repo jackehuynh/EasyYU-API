@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -59,10 +60,10 @@ public class SubjectControllerTest {
     }
 
     @Test
-    public void getAllSubjects() throws Exception {
-        List<Subject> subjects = subjectController.getAllSubject();
+    public void getAllSubjects(HttpServletRequest req) throws Exception {
+        List<Subject> subjects = subjectController.getAllSubject(req);
 
-        given(subjectController.getAllSubject()).willReturn(subjects);
+        given(subjectController.getAllSubject(req)).willReturn(subjects);
 
         mvc.perform(get("http://localhost:8080/api/v1/subject")
                 .contentType(APPLICATION_JSON))
