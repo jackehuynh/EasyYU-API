@@ -31,6 +31,6 @@ public class SubjectController {
     // TODO: need subject service layer to handle this query
     @GetMapping("/{subject}")
     public Subject findBySubject(@PathVariable String subject) {
-        return subjectRepository.findBySubjectAllIgnoreCase(subject);
+        return subjectRepository.findBySubjectAllIgnoreCase(subject).orElseThrow(InvalidParameterException::new);
     }
 }

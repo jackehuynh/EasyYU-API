@@ -63,7 +63,7 @@ public class BuildingController {
     }
 
     @GetMapping("/athletic")
-    public List<AthleticBuilding> getAllAthleticBuildin(HttpServletRequest req) {
+    public List<AthleticBuilding> getAllAthleticBuilding(HttpServletRequest req) {
         if (req.getParameterMap().size() > 0) {
             throw new InvalidParameterException();
         }

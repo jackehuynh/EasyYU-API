@@ -22,11 +22,14 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    @GetMapping("/subject")
-    public List<Course> getCoursesBySubject(
-            @RequestParam(value = "sj", required = true) String subject,
-            @RequestParam(value = "cnum", required = false) String courseNumber) {
+    // TODO: pagination and filtering
+    @GetMapping("/{subject}")
+    public List<Course> getCoursesBySubject(@PathVariable String subject) {
+        return courseService.findCoursesBySubject(subject);
+    }
 
+    @GetMapping("/{subject}/{courseNumber}")
+    public List<Course> getCourseBySubjectAndCourseNumber(@PathVariable String subject, @PathVariable String courseNumber) {
         return courseService.findCourseBySubjectAndOrCourseNumber(subject, courseNumber);
     }
 

@@ -12,12 +12,12 @@ public class CourseService {
 
     public List<Course> findCourseBySubjectAndOrCourseNumber(String subject, String courseNumber) {
         if (courseNumber == null) {
-            return findCourseBySubject(subject);
+            return findCoursesBySubject(subject);
         }
         return findCourseBySubjectAndCourseNumber(subject, courseNumber);
     }
 
-    public List<Course> findCourseBySubject(String subject) {
+    public List<Course> findCoursesBySubject(String subject) {
         return courseRepository.findBySubjectAllIgnoreCase(subject);
     }
 
@@ -35,7 +35,7 @@ public class CourseService {
         }
 
         if (subject != null && courseNumber == null & faculty == null) {
-            return findCourseBySubject(subject);
+            return findCoursesBySubject(subject);
         }
 
         if (subject != null && courseNumber != null & faculty == null) {

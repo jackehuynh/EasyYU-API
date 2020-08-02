@@ -30,7 +30,7 @@ public class FacultyController {
 
     @GetMapping("/{code}")
     public Faculty getFaculty(@PathVariable String code) {
-        return facultyRepository.findByCodeAllIgnoreCase(code);
+        return facultyRepository.findByCodeAllIgnoreCase(code).orElseThrow(InvalidParameterException::new);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.easyyu.exceptions;
 
+import com.easyyu.api.utils.HttpServletUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.InvalidParameterException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Map;
 
 @RestControllerAdvice(basePackages = "com.easyyu.api")
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -37,7 +39,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     // 400
     @ExceptionHandler(ExceptionType.InvalidParameterException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidParameterException(Exception ex) {
-        String query = getCurrentHttpRequest().getQueryString();
+        String query = HttpServletUtil.getCurrentHttpRequest().getQueryString();
         ExceptionResponse response = getResponse(HttpStatus.BAD_REQUEST.value(), String.format("query '%s' is not supported", query));
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
@@ -46,8 +48,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     // TODO: possibly not a 400 request and refactor InvalidParameterException from ExceptionType
     @ExceptionHandler(InvalidParameterException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidParamException(Exception ex) {
-        HttpServletRequest req = getCurrentHttpRequest();
-        ExceptionResponse response = getResponse(HttpStatus.BAD_REQUEST.value(), "incorrect parameter(s), please refer to the documentation " + req.getParameter(ex.getMessage()));
+//        HttpServletRequest req = getCurrentHttpRequest();
+        ExceptionResponse response = getResponse(HttpStatus.BAD_REQUEST.value(), "incorrect parameter(s), please refer to the documentation");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -64,6 +66,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         ExceptionResponse response = getResponse(HttpStatus.FORBIDDEN.value(), "permission denied");
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
+
     public Timestamp createTimeStamp() {
         Date date = new Date();
         long time = date.getTime();
@@ -71,17 +74,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return timestamp;
     }
 
-    public static HttpServletRequest getCurrentHttpRequest(){
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes instanceof ServletRequestAttributes) {
-            HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
-            return request;
-        }
-        return null;
-    }
-
     public ExceptionResponse getResponse(int status, String message) {
-        HttpServletRequest request = getCurrentHttpRequest();
+        HttpServletRequest request = HttpServletUtil.getCurrentHttpRequest();
         ExceptionResponse res = new ExceptionResponse();
         res.setMessage(message);
         res.setTimeStamp(createTimeStamp());
