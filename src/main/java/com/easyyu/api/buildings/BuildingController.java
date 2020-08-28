@@ -3,11 +3,8 @@ package com.easyyu.api.buildings;
 import com.easyyu.api.buildings.athletic.AthleticBuilding;
 import com.easyyu.api.buildings.athletic.AthleticBuildingRepository;
 import com.easyyu.api.buildings.food.*;
-import com.easyyu.api.utils.HttpServletUtil;
 import com.easyyu.exceptions.ExceptionType;
-import org.omg.CORBA.DynAnyPackage.Invalid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.security.InvalidParameterException;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(path = "${api_url}/buildings")

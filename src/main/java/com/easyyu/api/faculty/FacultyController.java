@@ -9,7 +9,6 @@ import java.security.InvalidParameterException;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequestMapping(path = "${api_url}/faculty")
 public class FacultyController {
 

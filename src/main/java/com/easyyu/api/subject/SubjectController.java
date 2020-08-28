@@ -8,7 +8,6 @@ import java.security.InvalidParameterException;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequestMapping(path = "${api_url}/subject")
 public class SubjectController {
 
